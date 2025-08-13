@@ -12,6 +12,11 @@ find_package(Boost REQUIRED COMPONENTS system filesystem thread iostreams)
 find_package(OpenVDB REQUIRED)
 find_package(TBB REQUIRED)
 find_package(spdlog REQUIRED)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(OPENVDB REQUIRED openvdb)
+
+target_include_directories(coacd PRIVATE ${OPENVDB_INCLUDE_DIRS})
+target_link_libraries(coacd PRIVATE ${OPENVDB_LIBRARIES})
 
 file(GLOB_RECURSE COACD_SRC "src/*.cc" "src/*.cpp")
 if(NOT WITH_3RD_PARTY_LIBS)
