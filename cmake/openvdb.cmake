@@ -1,4 +1,4 @@
-if(TARGET openvdb_static)
+if(TARGET OpenVDB::openvdb)
     return()
 endif()
 
@@ -15,23 +15,12 @@ set(OPENVDB_FUTURE_DEPRECATION OFF CACHE BOOL "" FORCE)
 set(USE_BLOSC OFF CACHE STRING "" FORCE)
 set(USE_ZLIB OFF CACHE STRING "" FORCE)
 
-include(FetchContent)
-FetchContent_Declare(
-    openvdb
-    GIT_REPOSITORY https://github.com/AcademySoftwareFoundation/openvdb.git
-    GIT_TAG        v8.2.0
-    PATCH_COMMAND cmake -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/cmake/openvdb_CMakeLists.txt <SOURCE_DIR>/openvdb/openvdb/CMakeLists.txt && cmake -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/cmake/openvdb_cmd_CMakeLists.txt <SOURCE_DIR>/openvdb/openvdb/cmd/CMakeLists.txt
-)
+find_package(OpenVDB REQUIRED)
 
-FetchContent_Declare(
-    tbb
-    GIT_REPOSITORY https://github.com/oneapi-src/oneTBB.git
-    GIT_TAG        v2022.0.0
-)
+find_package(TBB REQUIRED)
 
 set(CMAKE_CXX_FLAGS_OLD ${CMAKE_CXX_FLAGS})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DTBB_ALLOCATOR_TRAITS_BROKEN")
-FetchContent_MakeAvailable(tbb)
 set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS_OLD})
 
 if (WIN32)
@@ -40,10 +29,9 @@ endif()
 
 set(CMAKE_CXX_STANDARD 17)
 set(OPENVDB_ENABLE_UNINSTALL OFF CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(openvdb)
-set_target_properties(openvdb_static PROPERTIES POSITION_INDEPENDENT_CODE ON)
+set_target_properties(OpenVDB::openvdb PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
-target_include_directories(openvdb_static PUBLIC
+target_include_directories(OpenVDB::openvdb PUBLIC
     ${boost_SOURCE_DIR}/libs/numeric/conversion/include
     ${boost_SOURCE_DIR}/libs/any/include
     ${boost_SOURCE_DIR}/libs/algorithm/include
