@@ -13,10 +13,6 @@ find_package(ZLIB REQUIRED)
 find_package(Boost REQUIRED COMPONENTS system filesystem thread iostreams)
 find_package(spdlog REQUIRED)
 find_package(OpenVDB REQUIRED)
-pkg_check_modules(TBB REQUIRED tbb)
-target_include_directories(coacd PRIVATE ${TBB_INCLUDE_DIRS})
-target_link_libraries(coacd PRIVATE ${TBB_LIBRARIES})
-
 
 file(GLOB_RECURSE COACD_SRC "src/*.cc" "src/*.cpp")
 if(NOT WITH_3RD_PARTY_LIBS)
@@ -31,7 +27,7 @@ if(WITH_3RD_PARTY_LIBS)
     target_link_libraries(coacd PRIVATE
         OpenVDB::openvdb
         spdlog::spdlog
-        ${TBB_LIBRARIES}
+        TBB:tbb
         ZLIB::ZLIB
         Boost::system Boost::filesystem Boost::thread Boost::iostreams
     )
