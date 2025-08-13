@@ -9,7 +9,6 @@ option(WITH_3RD_PARTY_LIBS "Build with OpenVDB, spdlog, etc." ON)
 
 find_package(ZLIB REQUIRED)
 find_package(Boost REQUIRED COMPONENTS system filesystem thread iostreams)
-find_package(OpenVDB REQUIRED)
 find_package(TBB REQUIRED)
 find_package(spdlog REQUIRED)
 find_package(PkgConfig REQUIRED)
@@ -29,7 +28,7 @@ target_include_directories(coacd PRIVATE 3rd/cdt/CDT)
 
 if(WITH_3RD_PARTY_LIBS)
     target_link_libraries(coacd PRIVATE
-        OpenVDB::openvdb
+        ${OPENVDB_LIBRARIES}
         spdlog::spdlog
         TBB::tbb
         ZLIB::ZLIB
@@ -48,14 +47,14 @@ set_target_properties(coacd PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
 
 add_library(_coacd SHARED "public/coacd.cpp")
 if(WITH_3RD_PARTY_LIBS)
-    target_link_libraries(_coacd PRIVATE coacd spdlog::spdlog OpenVDB::openvdb)
+    target_link_libraries(_coacd PRIVATE coacd spdlog::spdlog ${OPENVDB_LIBRARIES})
 else()
     target_link_libraries(_coacd PRIVATE coacd)
 endif()
 
 add_executable(main main.cpp)
 if(WITH_3RD_PARTY_LIBS)
-    target_link_libraries(main PRIVATE coacd spdlog::spdlog OpenVDB::openvdb)
+    target_link_libraries(main PRIVATE coacd spdlog::spdlog ${OPENVDB_LIBRARIES})
 else()
     target_link_libraries(main PRIVATE coacd)
 endif()
