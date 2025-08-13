@@ -31,16 +31,5 @@ set(CMAKE_CXX_STANDARD 17)
 set(OPENVDB_ENABLE_UNINSTALL OFF CACHE BOOL "" FORCE)
 set_target_properties(OpenVDB::openvdb PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
-target_include_directories(OpenVDB::openvdb PUBLIC
-    ${boost_SOURCE_DIR}/libs/numeric/conversion/include
-    ${boost_SOURCE_DIR}/libs/any/include
-    ${boost_SOURCE_DIR}/libs/algorithm/include
-    ${boost_SOURCE_DIR}/libs/uuid/include
-    ${boost_SOURCE_DIR}/libs/foreach/include
-    ${boost_SOURCE_DIR}/libs/interprocess/include
-    ${boost_SOURCE_DIR}/libs/intrusive/include
-    ${boost_SOURCE_DIR}/libs/tti/include
-)
-
 add_library(Boost::disable_autolinking INTERFACE IMPORTED)
 set(CMAKE_CXX_STANDARD 20)
