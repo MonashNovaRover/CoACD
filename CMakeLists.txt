@@ -7,33 +7,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 option(WITH_3RD_PARTY_LIBS "Build with OpenVDB, spdlog, etc." ON)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake/")
+
 find_package(ZLIB REQUIRED)
 find_package(Boost REQUIRED COMPONENTS system filesystem thread iostreams)
 find_package(spdlog REQUIRED)
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(OPENVDB REQUIRED openvdb)
-target_include_directories(coacd PRIVATE ${OPENVDB_INCLUDE_DIRS})
-target_link_libraries(coacd PRIVATE ${OPENVDB_LIBRARIES})
-if(NOT TARGET OpenVDB::openvdb)
-    # Try to locate manually
-    find_path(OPENVDB_INCLUDE_DIR openvdb/openvdb.h
-        HINTS ${CMAKE_PREFIX_PATH}
-        PATH_SUFFIXES include)
-
-    find_library(OPENVDB_LIBRARY NAMES openvdb
-        HINTS ${CMAKE_PREFIX_PATH}
-        PATH_SUFFIXES lib)
-
-    if(NOT OPENVDB_INCLUDE_DIR OR NOT OPENVDB_LIBRARY)
-        message(FATAL_ERROR "Could not find OpenVDB headers or library")
-    endif()
-
-    add_library(OpenVDB::openvdb UNKNOWN IMPORTED)
-    set_target_properties(OpenVDB::openvdb PROPERTIES
-        IMPORTED_LOCATION ${OPENVDB_LIBRARY}
-        INTERFACE_INCLUDE_DIRECTORIES ${OPENVDB_INCLUDE_DIR}
-    )
-endif()
+find_package(OpenVDB REQUIRED)
 pkg_check_modules(TBB REQUIRED tbb)
 target_include_directories(coacd PRIVATE ${TBB_INCLUDE_DIRS})
 target_link_libraries(coacd PRIVATE ${TBB_LIBRARIES})
